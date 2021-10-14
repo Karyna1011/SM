@@ -1,20 +1,12 @@
 rpc:
   endpoint: "https://public-node.testnet.rsk.co"
 
-withdraw:
-  signer: 4f8048b22554257c143c55d3d6f56fbcdf8da0465fc0912bea0dfc44c0bf31f2
-  # asset owner is used as tx source
-contractData:
-  Contractaddress: 0x118b69e0BE87a87BB30e093F496b1eE989aA15E4
-
-
-
 transfer:
-  seed: "SECRET_SEED"
-  address: "SOURCE_ADDRESS"
-  confirmations: 20
-  gas_limit: 30000
-  gas_price: 20
+  key: 4f8048b22554257c143c55d3d6f56fbcdf8da0465fc0912bea0dfc44c0bf31f2
+  address: 0x118b69e0BE87a87BB30e093F496b1eE989aA15E4
+  value: 0
+  gas_limit: 300000
+  gas_price: 3000
 
 log:
   level: debug
