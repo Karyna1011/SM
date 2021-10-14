@@ -45,31 +45,4 @@ func (h *ether) EthClient() *ethclient.Client {
 		return eth
 	}).(*ethclient.Client)
 }
-func (h *ether) signer() *ethclient.Client {
-	return h.once.Do(func() interface{} {
-		var config struct {
-			signer string `fig:"signer,required"`
-		}
-
-		err := figure.
-			Out(&config).
-			With(figure.BaseHooks).
-			From(kv.MustGetStringMap(h.getter, "withdraw")).
-			Please()
-		if err != nil {
-			panic(errors.Wrap(err, "failed to figure out contractData"))
-		}
-
-		fmt.Printf("Ethereumt withdraw: %s", config.signer)
-
-		eth, err := ethclient.Dial(config.signer)
-		if err != nil{
-			panic(fmt.Sprintf("failed to dial %s", config.signer))
-		}
-
-		return eth
-
-		return 0
-	}).(*ethclient.Client)
-}
 
