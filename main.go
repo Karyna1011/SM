@@ -23,7 +23,6 @@ func main() {
 	cfg := config.NewConfig(kv.MustFromEnv())
 	eth := cfg.EthClient()
 	log := logan.New()
-	log = cfg.Log()
 
 	privateKey, err := crypto.HexToECDSA(cfg.TransferConfig().Key)
 	if err != nil {
@@ -98,7 +97,6 @@ func main() {
 
 			log.Info("RESULT:", result)
 			fmt.Println("The Current time is: ", tm)
-			d.Reset(3 * time.Second)
 
 		}
 
