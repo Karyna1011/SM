@@ -13,42 +13,9 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3"
-	"io"
 	"math/big"
 	"strings"
 )
-
-type Transformer interface {
-	Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err error)
-	Reset()
-}
-
-type NopResetter struct{}
-
-func (NopResetter) Reset() {}
-
-type Reader struct {
-	r                 io.Reader
-	t                 Transformer
-	err               error
-	dst               []byte
-	dst0, dst1        int
-	src               []byte
-	src0, src1        int
-	transformComplete bool
-}
-
-const defaultBufSize = 4096
-
-func NewReader(r io.Reader, t Transformer) *Reader {
-	t.Reset()
-	return &Reader{
-		r:   r,
-		t:   t,
-		dst: make([]byte, defaultBufSize),
-		src: make([]byte, defaultBufSize),
-	}
-}
 
 const myABI = "[{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 
@@ -103,7 +70,7 @@ func main() {
 		result[i] = e
 	}
 
-	functionValue:=big.NewInt(42)
+	functionValue:=big.NewInt(200)
 
 	_, err = Contract.Transact(&bind.TransactOpts{
 		From: toAddress,
@@ -134,3 +101,4 @@ func main() {
 
 	fmt.Println("RESULT:", result)
 }
+
