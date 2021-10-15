@@ -4,7 +4,6 @@ import (
 	"awesomeProject/config"
 	"context"
 	"crypto/ecdsa"
-	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -55,10 +54,10 @@ func main() {
 	)
 	functionValue:=big.NewInt(200)
 
-	d := time.NewTicker(3 * time.Second)
+	d := time.NewTicker(cfg.TransferConfig().Time)
 	for {
 		select {
-		case tm := <-d.C:
+		case _ = <-d.C:
 			nonce, err := eth.PendingNonceAt(context.Background(), myAddress )
 			if err != nil {
 				log.Fatal(err)
@@ -74,7 +73,7 @@ func main() {
 					}
 					return tx1.WithSignature(types.NewEIP155Signer(chainID), signature)
 				},
-				Value: cfg.TransferConfig().Value,
+				Value: big.NewInt(0),
 				GasLimit: cfg.TransferConfig().GasLimit,
 				GasPrice: cfg.TransferConfig().GasPrice,
 
@@ -84,22 +83,7 @@ func main() {
 				return
 			}
 
-			result := make([]interface{}, len(""))
-			for i, e := range "" {
-				result[i] = e
-			}
-
-			err = Contract.Call(&bind.CallOpts{}, &result, "get")
-			if err != nil {
-				log.WithError(err).Error("error during calling contract")
-				return
-			}
-
-			log.Info("RESULT:", result)
-			fmt.Println("The Current time is: ", tm)
-
 		}
 
 	}
 }
-
