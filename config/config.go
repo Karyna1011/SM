@@ -5,6 +5,7 @@ import (
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
 	"math/big"
+	"time"
 )
 
 type TransferConfig struct {
@@ -13,6 +14,7 @@ type TransferConfig struct {
 	Value         *big.Int `fig:"value"`
 	GasLimit      uint64   `fig:"gas_limit"`
 	GasPrice      *big.Int `fig:"gas_price"`
+	Time 		  time.Duration `fig:"time"`
 }
 
 func (c *config) TransferConfig() TransferConfig {
