@@ -9,14 +9,17 @@ import (
 var ERC20WithdrawVersion string
 
 type config struct {
+	transferConfig TransferConfig
+	contractConfig ContractConfig
 	getter kv.Getter
 	once   comfig.Once
-
 	Ether
 	comfig.Logger
 }
 
 type Config interface {
+	TransferConfig() TransferConfig
+	ContractConfig() ContractConfig
 	Log() *logan.Entry
 	Ether
 }
