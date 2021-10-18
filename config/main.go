@@ -11,8 +11,10 @@ var ERC20WithdrawVersion string
 type config struct {
 	transferConfig TransferConfig
 	contractConfig ContractConfig
-	getter kv.Getter
-	once   comfig.Once
+	getter         kv.Getter
+	onceTransfer   comfig.Once
+	onceContract   comfig.Once
+
 	Ether
 	comfig.Logger
 }
@@ -26,8 +28,9 @@ type Config interface {
 
 func NewConfig(getter kv.Getter) Config {
 	return &config{
-		getter:    getter,
-		Ether:     NewEther(getter),
-		Logger:    comfig.NewLogger(getter, comfig.LoggerOpts{Release: ERC20WithdrawVersion}),
+		getter: getter,
+		Ether:  NewEther(getter),
+		Logger: comfig.NewLogger(getter, comfig.LoggerOpts{Release: ERC20WithdrawVersion}),
 	}
 }
+
