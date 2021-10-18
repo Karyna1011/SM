@@ -4,17 +4,17 @@ import (
 	"gitlab.com/distributed_lab/figure"
 	"gitlab.com/distributed_lab/kit/kv"
 	"gitlab.com/distributed_lab/logan/v3/errors"
+	"math/big"
 )
 
 type ContractConfig struct {
-	AmountOutMin  int64       `fig:"amountOutMin"`
-	AddressArray  []string    `fig:"addressArray"`
-	Address       string      `fig:"address"`
-	Deadline      int64       `fig:"deadline"`
+	Percent       *big.Int     `fig:"percent"`
+	Amount        *big.Int    `fig:"amount"`
+	AddressArray  []string    `fig:"addresses"`
 }
 
 func (c *config) ContractConfig() ContractConfig {
-	c.once.Do(func() interface{} {
+	c.onceContract.Do(func() interface{} {
 		var result ContractConfig
 
 		err := figure.Out(&result).
