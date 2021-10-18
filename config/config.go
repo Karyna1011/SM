@@ -9,16 +9,16 @@ import (
 )
 
 type TransferConfig struct {
-	Key           string   `fig:"key"`
-	Address       string   `fig:"address"`
-	Value         *big.Int `fig:"value"`
-	GasLimit      uint64   `fig:"gas_limit"`
-	GasPrice      *big.Int `fig:"gas_price"`
-	Time 		  time.Duration `fig:"time"`
+	Key       string        `fig:"key"`
+	Address   string        `fig:"address"`
+	GasLimit  uint64        `fig:"gas_limit"`
+	GasPrice  *big.Int      `fig:"gas_price"`
+	Time      time.Duration `fig:"time"`
+	Timestamp time.Duration `fig:"timestamp"`
 }
 
 func (c *config) TransferConfig() TransferConfig {
-	c.once.Do(func() interface{} {
+	c.onceTransfer.Do(func() interface{} {
 		var result TransferConfig
 
 		err := figure.Out(&result).
@@ -33,4 +33,5 @@ func (c *config) TransferConfig() TransferConfig {
 	})
 	return c.transferConfig
 }
+
 
