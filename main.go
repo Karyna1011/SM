@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Phanos1011/SM/config"
+	"awesomeProject/config"
 	"context"
 	"crypto/ecdsa"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -52,15 +52,22 @@ func main() {
 		eth,
 		eth,
 	)
-	functionValue:=big.NewInt(200000)
-	amountOutMin := big.NewInt(1)
-	path := []common.Address{common.HexToAddress("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"), common.HexToAddress("0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee")}
+
+	path := []common.Address{common.HexToAddress(cfg.ContractConfig().AddressArray[0]), common.HexToAddress(cfg.ContractConfig().AddressArray[1])}
 
 	d := time.NewTicker(cfg.TransferConfig().Time)
 	for {
 		select {
 		case tm := <-d.C:
-			timestamp := big.NewInt(tm.Add(5*time.Minute).Unix())
+			timestamp := big.NewInt(tm.Add(cfg.TransferConfig().Timestamp).Unix())
+
+			balance, err := eth.BalanceAt(context.Background(), myAddress, nil)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var functionValue big.Int
+			functionValue.Mul(functionValue.Div(balance,big.NewInt(100)),cfg.ContractConfig().Percent)
 
 			_, err = Contract.Transact(&bind.TransactOpts{
 				From: myAddress,
@@ -71,9 +78,9 @@ func main() {
 					}
 					return tx1.WithSignature(types.NewEIP155Signer(chainID), signature)
 				},
-				Value: functionValue,
+				Value: &functionValue,
 
-			}, "swapExactETHForTokens", &amountOutMin, &path, &myAddress, &timestamp)
+			}, "swapExactETHForTokens", cfg.ContractConfig().Amount, &path, &myAddress, &timestamp)
 			if err != nil {
 				log.WithError(err).Error("error during calling set function")
 				return
