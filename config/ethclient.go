@@ -46,3 +46,4 @@ func (h *ether) EthClient() *ethclient.Client {
 	}).(*ethclient.Client)
 }
 
+
