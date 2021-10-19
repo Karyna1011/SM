@@ -3,7 +3,7 @@ name: Build to GHCR Registry
 on: [push]
 
 env:
-  IMAGE_NAME: SM
+  IMAGE_NAME: sm
 
 jobs:
   push:
