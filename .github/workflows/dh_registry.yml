@@ -1,0 +1,32 @@
+name: Build to Docker Hub Registry
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+      
+env:
+  DH_REPOSITORY: sm
+  DH_PROJECT: phanos1011
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $DH_REPOSITORY
+
+      - name: Log in to registry
+        run: echo "${{secrets.DOCKERHUB_PASSWORD}}" | docker login -u "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=$DH_PROJECT/$DH_REPOSITORY
+          IMAGE_ID=$(echo $DH_REPOSITORY | tr '[A-Z]' '[a-z]')
+          TAG=${GITHUB_REF#refs/*/}
+          echo IMAGE_ID=$IMAGE_ID
+          echo TAG=$TAG
+          docker tag $IMAGE_NAME $IMAGE_ID:$TAG
+          docker push $IMAGE_ID:$TAG
